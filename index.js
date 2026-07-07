@@ -1,6 +1,6 @@
 // Custom Chat Avatar - SillyTavern Extension
 // 为角色和用户自定义聊天区域头像，支持多种比例、高清图片和位置调整
-// 图片存储在插件目录 img/ 子文件夹中（通过 assets API）
+// 图片以 base64 存储在 extension_settings 中（服务端 settings.json，非浏览器 localStorage）
 
 const EXTENSION_NAME = 'custom-chat-avatar';
 const EXTENSION_FOLDER = `third-party/${EXTENSION_NAME}`;
@@ -20,7 +20,7 @@ let currentTarget = 'user';
 let currentRatio = '16:9';
 
 // ============================================
-// 存储层
+// 存储层 - 全部存在 extension_settings（服务端文件）
 // ============================================
 
 function getCtx() {
@@ -50,64 +50,6 @@ function deleteAvatarMeta(target) {
     const settings = initSettings();
     delete settings.avatars[target];
     getCtx().saveSettingsDebounced();
-}
-
-function makeFilename(target) {
-    const safe = target.replace(/[^a-zA-Z0-9_一-鿿\-]/g, '_');
-    return `avatar_${safe}.jpg`;
-}
-
-async function uploadImage(target, blob) {
-    const filename = makeFilename(target);
-    const ctx = getCtx();
-
-    const base64 = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-
-    const response = await fetch('/api/assets/upload', {
-        method: 'POST',
-        headers: ctx.getRequestHeaders(),
-        body: JSON.stringify({
-            name: filename,
-            data: base64,
-            category: 'extension_data',
-            folder: `${EXTENSION_NAME}/img`,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
-    }
-
-    return filename;
-}
-
-async function deleteImage(target) {
-    const filename = makeFilename(target);
-    const ctx = getCtx();
-
-    try {
-        await fetch('/api/assets/delete', {
-            method: 'POST',
-            headers: ctx.getRequestHeaders(),
-            body: JSON.stringify({
-                category: 'extension_data',
-                folder: `${EXTENSION_NAME}/img`,
-                name: filename,
-            }),
-        });
-    } catch (e) {
-        console.warn(`[${EXTENSION_NAME}] Failed to delete image:`, e);
-    }
-}
-
-function getImageUrl(target) {
-    const filename = makeFilename(target);
-    return `/api/assets/get?path=extension_data/${EXTENSION_NAME}/img/${filename}&t=${Date.now()}`;
 }
 
 // ============================================
@@ -156,15 +98,13 @@ function processImage(file, ratio) {
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
 
-            canvas.toBlob(
-                (blob) => blob ? resolve(blob) : reject(new Error('Image conversion failed')),
-                'image/jpeg',
-                JPEG_QUALITY,
-            );
+            // 直接输出 dataURL，存入 extension_settings（服务端文件，不受浏览器限制）
+            const dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+            resolve(dataUrl);
         };
         img.onerror = () => {
             URL.revokeObjectURL(objectUrl);
-            reject(new Error('Image load failed'));
+            reject(new Error('图片加载失败'));
         };
         img.src = objectUrl;
     });
@@ -183,12 +123,12 @@ function updatePreview() {
 
     if (!previewWrapper || !previewImg || !noImage || !posControls) return;
 
-    if (meta && meta.filename) {
+    if (meta && meta.data) {
         previewWrapper.classList.add('active');
         noImage.classList.add('hidden');
         posControls.style.display = '';
 
-        previewImg.src = getImageUrl(currentTarget);
+        previewImg.src = meta.data;
 
         const ratio = meta.ratio || '16:9';
         const { w, h } = RATIO_MAP[ratio];
@@ -302,8 +242,8 @@ function applyAvatarToMessage(mesElement) {
 
     if (!avatarContainer || !avatarImg) return;
 
-    if (meta && meta.filename) {
-        avatarImg.src = getImageUrl(target);
+    if (meta && meta.data) {
+        avatarImg.src = meta.data;
         avatarContainer.classList.add('custom-avatar-active');
 
         const pos = meta.position || { x: 0, y: 0, scale: 100 };
@@ -363,11 +303,10 @@ function bindSettingsEvents() {
 
             try {
                 toastr.info('正在处理图片...');
-                const blob = await processImage(file, currentRatio);
-                const filename = await uploadImage(currentTarget, blob);
+                const dataUrl = await processImage(file, currentRatio);
 
                 const meta = {
-                    filename: filename,
+                    data: dataUrl,
                     ratio: currentRatio,
                     position: { x: 0, y: 0, scale: 100 },
                 };
@@ -386,12 +325,7 @@ function bindSettingsEvents() {
 
     const deleteBtn = document.getElementById('custom_avatar_delete_btn');
     if (deleteBtn) {
-        deleteBtn.addEventListener('click', async () => {
-            try {
-                await deleteImage(currentTarget);
-            } catch (e) {
-                console.warn(`[${EXTENSION_NAME}] Delete warning:`, e);
-            }
+        deleteBtn.addEventListener('click', () => {
             deleteAvatarMeta(currentTarget);
             updatePreview();
             applyAllAvatars();
@@ -435,7 +369,7 @@ jQuery(async () => {
 
     initSettings();
 
-    // 使用官方推荐方式加载设置面板
+    // 加载设置面板
     const { renderExtensionTemplateAsync } = ctx;
     const settingsHtml = await renderExtensionTemplateAsync(EXTENSION_FOLDER, 'settings');
     $('#extensions_settings2').append(settingsHtml);
