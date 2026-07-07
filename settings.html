@@ -1,0 +1,82 @@
+<div id="custom-avatar-settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>自定义聊天头像</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <!-- 目标选择 -->
+            <div class="custom-avatar-section">
+                <label for="custom_avatar_target">设置对象：</label>
+                <select id="custom_avatar_target" class="text_pole">
+                    <option value="user">用户 (我)</option>
+                </select>
+            </div>
+
+            <!-- 比例选择 -->
+            <div class="custom-avatar-section">
+                <label for="custom_avatar_ratio">头像比例：</label>
+                <select id="custom_avatar_ratio" class="text_pole">
+                    <option value="1:1">1:1 (正方形)</option>
+                    <option value="3:4">3:4 (竖版)</option>
+                    <option value="4:3">4:3 (横版)</option>
+                    <option value="16:9" selected>16:9 (宽屏)</option>
+                    <option value="9:16">9:16 (竖屏)</option>
+                    <option value="3:2">3:2 (经典)</option>
+                </select>
+            </div>
+
+            <!-- 上传按钮 -->
+            <div class="custom-avatar-section">
+                <input type="file" id="custom_avatar_file" accept="image/*" hidden>
+                <div id="custom_avatar_upload_btn" class="menu_button menu_button_icon interactable" tabindex="0" role="button">
+                    <i class="fa-solid fa-upload"></i>
+                    <span>上传高清头像</span>
+                </div>
+                <div id="custom_avatar_delete_btn" class="menu_button menu_button_icon interactable" tabindex="0" role="button">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>恢复默认</span>
+                </div>
+            </div>
+
+            <!-- 预览区域 -->
+            <div class="custom-avatar-section">
+                <label>预览：</label>
+                <div id="custom_avatar_preview_container">
+                    <div id="custom_avatar_preview_wrapper">
+                        <img id="custom_avatar_preview_img" src="" alt="预览">
+                    </div>
+                    <div id="custom_avatar_no_image">未设置自定义头像</div>
+                </div>
+            </div>
+
+            <!-- 位置调整控件 -->
+            <div id="custom_avatar_position_controls" class="custom-avatar-section" style="display:none;">
+                <label>位置调整：</label>
+                <div class="custom-avatar-slider-group">
+                    <div class="custom-avatar-slider-row">
+                        <span class="custom-avatar-slider-label">缩放：</span>
+                        <input type="range" id="custom_avatar_scale" min="50" max="300" value="100" class="custom-avatar-slider">
+                        <span id="custom_avatar_scale_value" class="custom-avatar-slider-value">100%</span>
+                    </div>
+                    <div class="custom-avatar-slider-row">
+                        <span class="custom-avatar-slider-label">X 偏移：</span>
+                        <input type="range" id="custom_avatar_x" min="-100" max="100" value="0" class="custom-avatar-slider">
+                        <span id="custom_avatar_x_value" class="custom-avatar-slider-value">0%</span>
+                    </div>
+                    <div class="custom-avatar-slider-row">
+                        <span class="custom-avatar-slider-label">Y 偏移：</span>
+                        <input type="range" id="custom_avatar_y" min="-100" max="100" value="0" class="custom-avatar-slider">
+                        <span id="custom_avatar_y_value" class="custom-avatar-slider-value">0%</span>
+                    </div>
+                </div>
+                <div class="custom-avatar-btn-row">
+                    <div id="custom_avatar_reset_pos_btn" class="menu_button menu_button_icon interactable" tabindex="0" role="button">
+                        <i class="fa-solid fa-arrows-to-dot"></i>
+                        <span>重置位置</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

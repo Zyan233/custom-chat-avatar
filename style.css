@@ -1,0 +1,115 @@
+/* ============================================
+   Custom Chat Avatar - 样式
+   ============================================ */
+
+/* === 设置面板样式 === */
+#custom-avatar-settings .custom-avatar-section {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#custom-avatar-settings .custom-avatar-section > label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--SmartThemeBodyColor);
+}
+
+#custom-avatar-settings .menu_button {
+    width: fit-content;
+}
+
+/* 预览容器 */
+#custom_avatar_preview_container {
+    position: relative;
+    width: 200px;
+    max-width: 100%;
+    background: var(--black30a);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--SmartThemeBorderColor);
+}
+
+#custom_avatar_preview_wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: none;
+}
+
+#custom_avatar_preview_wrapper.active {
+    display: block;
+}
+
+#custom_avatar_preview_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.1s ease;
+}
+
+#custom_avatar_no_image {
+    padding: 20px;
+    text-align: center;
+    color: var(--SmartThemeQuoteColor);
+    font-style: italic;
+}
+
+#custom_avatar_no_image.hidden {
+    display: none;
+}
+
+/* 位置调整控件 */
+#custom_avatar_position_controls .custom-avatar-slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background: var(--black30a);
+    border-radius: 6px;
+}
+
+.custom-avatar-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-avatar-slider-label {
+    min-width: 50px;
+    font-size: 0.85em;
+    color: var(--SmartThemeBodyColor);
+}
+
+.custom-avatar-slider {
+    flex: 1;
+    height: 4px;
+    cursor: pointer;
+}
+
+.custom-avatar-slider-value {
+    min-width: 40px;
+    text-align: right;
+    font-size: 0.8em;
+    color: var(--SmartThemeQuoteColor);
+}
+
+.custom-avatar-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+/* === 聊天区域头像样式 === */
+.mes .avatar.custom-avatar-active {
+    overflow: hidden;
+}
+
+.mes .avatar.custom-avatar-active img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}

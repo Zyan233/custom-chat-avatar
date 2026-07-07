@@ -1,0 +1,13 @@
+{
+    "display_name": "Custom Chat Avatar",
+    "loading_order": 10,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Zyan233",
+    "version": "2.1.0",
+    "homePage": "https://github.com/Zyan233/custom-chat-avatar",
+    "description": "为角色和用户自定义聊天区域头像，支持多比例、高清图片和位置调整",
+    "auto_update": true
+}
