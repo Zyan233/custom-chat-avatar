@@ -104,12 +104,13 @@
 
 /* === 聊天区域头像样式 === */
 .mes .avatar.custom-avatar-active {
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 .mes .avatar.custom-avatar-active img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    transform-origin: center center !important;
 }

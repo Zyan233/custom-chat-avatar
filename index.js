@@ -247,9 +247,9 @@ function applyAvatarToMessage(mesElement) {
         avatarContainer.classList.add('custom-avatar-active');
 
         const pos = meta.position || { x: 0, y: 0, scale: 100 };
-        avatarImg.style.objectPosition = `${50 + pos.x}% ${50 + pos.y}%`;
-        avatarImg.style.transform = `scale(${pos.scale / 100})`;
+        avatarImg.style.transform = `translate(${pos.x}%, ${pos.y}%) scale(${pos.scale / 100})`;
         avatarImg.style.objectFit = 'cover';
+        avatarImg.style.objectPosition = '';
     } else {
         avatarContainer.classList.remove('custom-avatar-active');
         avatarImg.style.objectPosition = '';
