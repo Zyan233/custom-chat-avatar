@@ -103,14 +103,12 @@
 }
 
 /* === 聊天区域头像样式 === */
-.mes .avatar.custom-avatar-active {
-    overflow: hidden !important;
-}
-
+/* 不修改 .avatar 的 overflow，避免裁剪主题的伪元素头像框 */
 .mes .avatar.custom-avatar-active img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
     object-position: center center !important;
     transform-origin: center center !important;
+    clip-path: inset(0) !important;
 }
