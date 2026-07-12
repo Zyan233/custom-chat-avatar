@@ -10,6 +10,47 @@
     gap: 5px;
 }
 
+/* Tab 切换 */
+.custom-avatar-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    padding: 4px;
+    background: var(--black30a);
+    border-radius: 8px;
+    border: 1px solid var(--SmartThemeBorderColor);
+}
+
+.custom-avatar-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: var(--SmartThemeBodyColor);
+    background: transparent;
+    transition: background 0.15s ease, color 0.15s ease;
+    user-select: none;
+}
+
+.custom-avatar-tab:hover {
+    background: var(--black50a);
+}
+
+.custom-avatar-tab.active {
+    background: var(--SmartThemeQuoteColor, var(--ac-style-color, #4a90e2));
+    color: var(--SmartThemeBodyColor);
+    font-weight: bold;
+}
+
+.custom-avatar-tab i {
+    font-size: 0.95em;
+}
+
 #custom-avatar-settings .custom-avatar-section > label {
     font-weight: bold;
     font-size: 0.9em;
